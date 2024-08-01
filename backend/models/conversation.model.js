@@ -1,10 +1,14 @@
 import mongoose from "mongoose";
 
 const conversationSchema = new mongoose.Schema({
+    chatRoom : {
+        type : Number,
+        require : true
+    },
     participants : [
         {
-            type : mongoose.Schema.Types.ObjectId,
-            ref : 'User'
+            type : Number,
+            ref : 'true'
         }
     ],
     messages : [

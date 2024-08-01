@@ -1,9 +1,11 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
+import { query } from "../db/connectToMySQLDB.js";
 
 const protectRoute = async (req, res, next) => {
     try {
-        const token = req.cookies.jwt;
+        const token = req.cookies.refresh;
+        // console.log(token)
         if(!token){
             return  res.status(401).json({error : "Unauthorized - No Token Provided"});
         }
@@ -14,13 +16,15 @@ const protectRoute = async (req, res, next) => {
             return  res.status(401).json({error : "Unauthorized - Invalid Token"});
         }
 
-        const user = await User.findById(decoded.userId).select("-password");
-
+        // const user = await User.findById(decoded.userId).select("-password");
+        // console.log(decoded)
+        const user = await query('SELECT id, username FROM user WHERE id = ?', [decoded.id]);
+        console.log(user)
         if(!user){
             return res.status(404).json({ error : "User not found"});
         }
 
-        req.user = user;
+        req.user = user[0];
 
         next();
     } catch (error) {

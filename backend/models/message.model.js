@@ -2,19 +2,17 @@ import mongoose from "mongoose";
 
 const messageSchema = new mongoose.Schema({
     senderId : {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        type: Number,
         required: true,
     },
-    receiverId : {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+    receiverIds: [{
+        type: Number,
         required: true,
-    },
+    }],
     message:{
         type: String,
         required: true,
-    }
+    },
     // createAt , updatedAt => message.createdAt 
 }, {timestamps : true});
 
