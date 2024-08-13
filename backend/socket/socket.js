@@ -1,13 +1,22 @@
 import { Server } from "socket.io";
 import http from 'http';
+import https from 'https';
 import express from "express";
+import fs from 'fs';
 
 const app = express();
 
-const server = http.createServer(app);
-const io = new Server(server, {
+const httpsOptions = {
+    key: fs.readFileSync('/usr/src/app/privkey.pem'),
+    cert: fs.readFileSync('/usr/src/app/fullchain.pem')
+};
+
+// const server = http.createServer(app);
+const httpServer = http.createServer(app);
+const httpsServer  = https.createServer(httpsOptions, app);  // https 서버 생성
+const io = new Server(httpsServer, {
     cors : {
-        origin : ["http://localhost:3000"],
+        origin : ["http://localhost:3000", 'https://wru.duckdns.org'],
         methods : ["GET", "POST"]
     },
     serveClient : false,
@@ -53,4 +62,4 @@ io.on('connection', (socket) => {
     });
 })
 
-export {app, io, server}
+export {app, io, httpServer,httpsServer}

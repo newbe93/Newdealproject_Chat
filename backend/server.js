@@ -7,9 +7,10 @@ import cors from 'cors';
 import authRoutes from "./routes/auth.routes.js"
 import messageRoutes from "./routes/message.routes.js"
 import userRoutes from "./routes/user.routes.js"
+import chatroomsRoutes from "./routes/chatrooms.routes.js"
 
 import connectToMongoDB from "./db/connectToMongoDB.js";
-import { app, server } from "./socket/socket.js";
+import { app, httpsServer } from "./socket/socket.js";
 import {connectToMySQLDB} from "./db/connectToMySQLDB.js";
 
 
@@ -25,6 +26,7 @@ app.use(express.json()); // to parse the incoming requests with JSON payloads (f
 app.use("/api/auth", authRoutes)
 app.use("/api/messages", messageRoutes)
 app.use("/api/users", userRoutes);
+app.use("/api/chatrooms",chatroomsRoutes)
 
 // app.use(express.static(path.join(__dirname,"/frontend/")));
 
@@ -41,12 +43,12 @@ app.use("/api/users", userRoutes);
 
 // CORS 미들웨어 추가
 app.use(cors({
-  origin: 'http://localhost:3000', // 프론트엔드 주소
+  origin: ['http://localhost:3000', 'https://wru.duckdns.org'], // 프론트엔드 주소
   credentials: true
 }));
 
 
-server.listen(PORT, () => {
+httpsServer.listen(PORT, () => {
     connectToMongoDB();
     connectToMySQLDB();
     console.log(`Server Running on port ${PORT}`)

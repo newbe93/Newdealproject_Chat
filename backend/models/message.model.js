@@ -13,6 +13,16 @@ const messageSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    readBy: [{
+        userId: {
+            type: Number,
+            required: true,
+        },
+        readAt: {
+            type: Date,
+            default: null,
+        }
+    }]
     // createAt , updatedAt => message.createdAt 
 }, {timestamps : true});
 
